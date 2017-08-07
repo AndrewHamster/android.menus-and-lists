@@ -3,50 +3,59 @@ package com.andrewhamster.listsandmenus;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.TextureView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Andre on 06-Aug-17.
  */
 
 public class PostsAdapter extends RecyclerView.Adapter {
-    private String[] posts;
+    private List<Post> posts;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TextView titleText = (TextView) LayoutInflater
+        View root = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.item_post, parent, false);
-        PostViewHolder vh = new PostViewHolder(titleText);
+
+        PostViewHolder vh = new PostViewHolder(root);
         return vh;
     }
 
-    public PostsAdapter(String[] items)
+    public PostsAdapter(List<Post> posts)
     {
-        this.posts = items;
+        this.posts = posts;
     }
 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((PostViewHolder)holder).titleTextView.setText(posts[position]);
+        ((PostViewHolder)holder).titleTextView.setText(posts.get(position).title);
+        ((PostViewHolder)holder).bodyTextView.setText(posts.get(position).body);
     }
 
     @Override
     public int getItemCount() {
-        return posts.length;
+        return posts.size();
     }
 
 
 
     public static class PostViewHolder extends RecyclerView.ViewHolder{
+        public LinearLayout root;
         public TextView titleTextView;
-        public PostViewHolder(TextView tv)
+        public TextView bodyTextView;
+        public PostViewHolder(View root)
         {
-            super(tv);
-            titleTextView = tv;
+            super(root);
+            titleTextView = root.findViewById(R.id.post_title);
+            bodyTextView = root.findViewById(R.id.post_body);
         }
     }
 }

@@ -8,83 +8,38 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.CompoundButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ListOfPosts extends AppCompatActivity {
 
     private RecyclerView postsRecyclerView;
     private RecyclerView.Adapter postsAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private SwitchCompat postsSwitch;
-    private String[] dataset;
+    private List<Post> dataset;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_posts);
 
         postsRecyclerView = findViewById(R.id.list_of_posts);
-        layoutManager = new LinearLayoutManager(this);
+
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+
         postsRecyclerView.setLayoutManager(layoutManager);
 
         postsSwitch = findViewById(R.id.switch_list);
 
         postsSwitch.setOnCheckedChangeListener(new OnSwitchListener());
 
-        dataset = new String[]{
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-                "Lorem",
-                "Ipsum",
-                "dolor",
-                "sit",
-                "amet",
-        };
+        Post post = new Post();
+
+        post.body = "Lorem ipsum";
+        post.title = "Title";
+
+        dataset = new ArrayList<Post>(){};
+        dataset.add(post);
+        postsSwitch.setChecked(!dataset.isEmpty());
 
         postsAdapter = new PostsAdapter(dataset);
         postsRecyclerView.setAdapter(postsAdapter);
@@ -96,7 +51,14 @@ public class ListOfPosts extends AppCompatActivity {
             if(b)
                 postsRecyclerView.setVisibility(View.VISIBLE);
             else
+            {
+                Post post = new Post();
+                post.title = "Magic";
+                post.body = "Lorem ipsum dolor sit amet";
                 postsRecyclerView.setVisibility(View.GONE);
+                dataset.add(post);
+                postsAdapter.notifyItemInserted(dataset.size());
+            }
         }
     }
 }
