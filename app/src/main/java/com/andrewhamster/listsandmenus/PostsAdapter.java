@@ -1,22 +1,20 @@
 package com.andrewhamster.listsandmenus;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Andre on 06-Aug-17.
- */
 
 public class PostsAdapter extends RecyclerView.Adapter {
     private List<Post> posts;
+    private Context context;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -24,8 +22,9 @@ public class PostsAdapter extends RecyclerView.Adapter {
                 .from(parent.getContext())
                 .inflate(R.layout.item_post, parent, false);
 
-        PostViewHolder vh = new PostViewHolder(root);
-        return vh;
+        context = parent.getContext();
+
+        return new PostViewHolder(root);
     }
 
     public PostsAdapter(List<Post> posts)
@@ -35,9 +34,16 @@ public class PostsAdapter extends RecyclerView.Adapter {
 
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((PostViewHolder)holder).titleTextView.setText(posts.get(position).title);
-        ((PostViewHolder)holder).bodyTextView.setText(posts.get(position).body);
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        final PostViewHolder post = (PostViewHolder)holder;
+        post.titleTextView.setText(posts.get(position).title);
+        post.bodyTextView.setText(posts.get(position).body);
+        post.moreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, new StringBuilder().append("[").append(position).append("] post is clicked").toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -49,13 +55,15 @@ public class PostsAdapter extends RecyclerView.Adapter {
 
     public static class PostViewHolder extends RecyclerView.ViewHolder{
         public LinearLayout root;
-        public TextView titleTextView;
-        public TextView bodyTextView;
-        public PostViewHolder(View root)
+        TextView titleTextView;
+        TextView bodyTextView;
+        ImageButton moreBtn;
+        PostViewHolder(View root)
         {
             super(root);
             titleTextView = root.findViewById(R.id.post_title);
             bodyTextView = root.findViewById(R.id.post_body);
+            moreBtn = root.findViewById(R.id.post_menu);
         }
     }
 }
